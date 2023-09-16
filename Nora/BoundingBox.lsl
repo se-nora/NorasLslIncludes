@@ -327,11 +327,12 @@ float GetBoundingBoxSurfaceHeight(vector pos, BoundingBoxData boundingBoxData)
         return OUT_OF_BOUNDS_HEIGHT;
     }
 
-    float upDistance = PlaneRayIntersectDistance(<1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    float upDistance =                      PlaneRayIntersectDistance(< 1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));
-    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0,  1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, -1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
-    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, 1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0,  1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    //upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
     return upDistance + zDiff;
 }
 

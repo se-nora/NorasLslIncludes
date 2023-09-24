@@ -27,6 +27,12 @@
     #define SetText(text) SetLinkText(LINK_THIS, text)
     #define SetLinkText(link, text) llSetLinkPrimitiveParamsFast(link, [PRIM_TEXT, text, <1,1,1>, 1])
 
+    bool HasSeatedAvatar()
+    {
+        key lastKey = llGetLinkKey(llGetNumberOfPrims());
+        return lastKey == llGetOwnerKey(lastKey);
+    }
+
     bool HasInventory(list names)
     {
         int i = llGetListLength(names);

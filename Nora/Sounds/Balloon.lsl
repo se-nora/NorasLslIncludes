@@ -24,7 +24,7 @@ list BalloonRubSounds = [
     "80ca2397-ac75-8e41-c353-0bbf1cb20843", // balloon 5
     "b0b46e4e-112d-3da0-9e8e-0504fa706e0c", // balloon 4
     "2b683e88-944e-66b3-adba-ccabcdd76daa", // balloon 3
-    "bd13f2eb-9fb9-feeb-2ae4-7d00b6529b26", // balloon 2
+    "bd13f2eb-9fb9-feeb-2ae4-7d00b6529b26" // balloon 2
 ];
 
 list BalloonPopSounds = [
@@ -33,5 +33,5 @@ list BalloonPopSounds = [
     "c86251f8-c69c-7300-9d69-784cd999930c", // 04-Balloon popping _ burst _ blast (92DC362-WSB)
     "81511ae9-86a9-7f4b-b55f-58c548687b04", // 03-Balloon popping _ burst _ blast (3F7BE70-WSB)
     "643f5635-4255-4c54-626d-fa3a4f6f414b", // 01-Balloon popping _ burst _ blast (248BDBD-WSB)
-    "40b274e9-0f84-8d18-7b85-69ad2e1effbf", // 02-Balloon popping _ burst _ blast (3D77618-WSB)
+    "40b274e9-0f84-8d18-7b85-69ad2e1effbf" // 02-Balloon popping _ burst _ blast (3D77618-WSB)
 ];

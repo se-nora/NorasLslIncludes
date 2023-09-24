@@ -39,6 +39,8 @@
         }
         return true;
     }
+    
+    #define GRAVITY 9.8
 
     // NOTE: the geometric center is bullshit, its the average of all linked prims center, not geometric at all, use bounding box instead
     //#define GetGeometricCenterGlobalPos() (llGetGeometricCenter()*llGetRootRotation() + llGetRootPosition())

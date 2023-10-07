@@ -3,13 +3,22 @@
 /// <param param="globalPullForceDirection">the directio the force is pulling at the <paramref param="localPullForceLocation"/></param>
 vector GetOffsetTorque(vector assumedScale, rotation rootRot, vector localPullForceLocation, vector globalPullForceDirection)
 {
+    if (globalPullForceDirection == <0,0,0>)
+    {
+        return <0, 0, 0>;
+    }
+    if (assumedScale.x == 0 || assumedScale.y == 0 || assumedScale.z == 0)
+    {
+        return <0, 0, 0>;
+    }
+
     float mass = llGetMass();
     vector scale = assumedScale;
     float volume = scale.x*scale.y*scale.z;
 
     rotation rotBetween = llRotBetween(localPullForceLocation, localPullForceLocation + globalPullForceDirection/rootRot);
     vector direction = llVecNorm(llRot2Euler(rotBetween));
-    vector torque = direction*(1/llVecMag(<localPullForceLocation.x/assumedScale.x,localPullForceLocation.y/assumedScale.y,localPullForceLocation.z/assumedScale.z>))*llVecMag(globalPullForceDirection)*rootRot;///volume;
+    vector torque = direction*(1/llVecMag(<localPullForceLocation.x/assumedScale.x, localPullForceLocation.y/assumedScale.y, localPullForceLocation.z/assumedScale.z>))*llVecMag(globalPullForceDirection)*rootRot;///volume;
     //SetText(Dump(direction, torque));
     return torque;
 }

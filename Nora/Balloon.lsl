@@ -1,6 +1,6 @@
 
 #define OriginalBallonLinkSize <.42, .42, 1.2>
-#define MinBallonLinkSize <0.03831, 0.03816, 0.12>
+#define MinBallonLinkSize <0.05064, 0.05061, 0.13747>
 #define MaxBallonLinkSize <.6, .6, 1.58915>
 #define MinBalloonAlpha 1
 #define MaxBalloonAlpha .7

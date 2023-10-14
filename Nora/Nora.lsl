@@ -53,8 +53,10 @@
     
     #define DisableParticles() llParticleSystem([]);
     #define DisableAllParticles() llLinkParticleSystem(LINK_SET, [])
+    #define DisableLinkParticles(link) llLinkParticleSystem(link, [])
 
     #define SetTimer(interval) llSetTimerEvent(interval)
+    #define Sleep(ms) llSleep(ms/1000.0)
 
     #define GetCallerInfo() __SHORTFILE__ + ":" + (string) ## __LINE__
 

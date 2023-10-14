@@ -14,6 +14,9 @@
 list ObjectGlowDefinition = [];
 #endif
 
+#ifndef OnSetParams
+#define OnSetParams();
+#endif
 
 default
 {

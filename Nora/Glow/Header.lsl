@@ -214,8 +214,13 @@ vector ColorSubNorm(vector c)
 
 SetParams(list objectGlowDefinition)
 {
+    OnSetParams();
     int i = 0;
     int objectGlowDefinitionCount = llGetListLength(objectGlowDefinition);
+    if (objectGlowDefinitionCount == 0)
+    {
+        return;
+    }
 
     int glowLink = GLOW_PRIM_DEF_LINK_DEFAULT;
     int firstLink = glowLink;

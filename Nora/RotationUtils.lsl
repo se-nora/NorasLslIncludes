@@ -34,3 +34,20 @@ vector GetOffsetTorqueOrig(rotation rootRot, vector localPullForceLocation, vect
     //SetText(Dump(direction, torque));
     return torque;
 }
+
+vector GetOffsetRotPosition(vector initialPosition, vector centerPosition, rotation rotAmount)
+{
+    return (initialPosition - centerPosition) * rotAmount + centerPosition;
+    /*
+    vector offset = initialPosition - centerPosition;
+                    
+    //The following line calculates the new coordinates based on 
+    //the rotation & offset
+    vector finalPosition = offset * rotAmount;
+    
+    //Since the rotation is calculated in terms of our offset, we need to add
+    //our original center_position back in - to get the final coordinates.
+    finalPosition += centerPosition;
+    
+    return finalPosition;*/
+}

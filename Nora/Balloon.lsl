@@ -54,8 +54,4 @@ SetScale(vector scale)
     }
     llScaleByFactor(difference);
     llSetLinkPrimitiveParamsFast(BalloonLinkNumber, [PRIM_SIZE, <scale.x, scale.y, scale.z>]);
-    if (!llGetAttached())
-    {
-        llSetStatus(STATUS_PHYSICS, true);
-    }
 }

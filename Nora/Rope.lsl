@@ -7,5 +7,3 @@
 //hop on, key attachedFromRope
 #define ROPE_DETACH_MESSAGE "hop off"
 #define ROPE_GET_STATUS_MESSAGE "help"
-//SetColorAndScale, vector color, float alpha, vector scale
-#define ROPE_SET_COLOR_AND_SCALE_MESSAGE "SetColorAndScale"

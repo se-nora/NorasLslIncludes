@@ -1,4 +1,4 @@
-#include "Nora\Sounds\Balloon.lsl"
+#include "Sounds\Balloon.lsl"
 
 #define OriginalBallonLinkSize <.42, .42, 1.2>
 #define MinBallonLinkSize <0.05064, 0.05061, 0.13747>

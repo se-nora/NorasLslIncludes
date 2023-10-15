@@ -1,6 +1,3 @@
-#include "..\Nora.lsl"
-#include "..\ConditionalReturn.lsl"
-
 #define GLOW_CHANNEL -123513
 
 // empty means disabled / all

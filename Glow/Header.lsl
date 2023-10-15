@@ -1,4 +1,4 @@
-#include "..\Nora.lsl"
+#include "Nora.lsl"
 #include "GlowProtocol.lsl"
 
 float GlowStrength = 0;

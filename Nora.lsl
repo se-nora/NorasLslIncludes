@@ -93,16 +93,13 @@
         return 1;
     }
 
-    #include "Nora\Sounds\Female.lsl"
-    #include "Nora\Sounds\Male.lsl"
-    #include "Nora\Sounds\Fireplace.lsl"
-    #include "Nora\Sounds\Piano.lsl"
+    #include "Sounds\Female.lsl"
+    #include "Sounds\Male.lsl"
+    #include "Sounds\Fireplace.lsl"
+    #include "Sounds\Piano.lsl"
     
     #include "Rope.lsl"
     
-    #include "VectorUtils.lsl"
-    #include "RotationUtils.lsl"
-    #include "NumberUtils.lsl"
     #include "AnimationUtils.lsl"
     #include "AvatarUtils.lsl"
     #include "BoundingBox.lsl"
@@ -110,7 +107,10 @@
     #include "FindLink.lsl"
     #include "GetColor.lsl"
     #include "GetName.lsl"
-    #include "ListUtils.lsl"
-    #include "ResetUtils.lsl"
     #include "Intersects.lsl"
+    #include "ListUtils.lsl"
+    #include "NumberUtils.lsl"
+    #include "ResetUtils.lsl"
+    #include "RotationUtils.lsl"
+    #include "VectorUtils.lsl"
 #endif

@@ -1,4 +1,4 @@
-#include "Nora\Nora.lsl"
+#include "Nora.lsl"
 
 BoundingBoxData GetDeathBoundingBox(key k)
 {

@@ -3,9 +3,9 @@
 // - IS_COLOR_HOST
 // - Initiator
 
-#include "..\Nora.lsl"
+#include "Nora.lsl"
 #ifdef IS_PAT_ENABLED
-#include "Nora\Pats\PatDefinition.lsl"
+#include "Pats\PatDefinition.lsl"
 #endif
 #ifndef GetNextTouchGlowColor
 #define GetNextTouchGlowColor() GetRandomColor()

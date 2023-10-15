@@ -146,4 +146,3 @@ string CreateGlowMessage(key target, float strength, float fadeSpeed, float time
         + ConditionalReturnList(timerDuration != GLOW_PROTOCOL_GLOW_COMMAND_TIMER_DURATION_DEFAULT, [GLOW_PROTOCOL_GLOW_COMMAND_TIMER_DURATION, timerDuration], [])
         + ConditionalReturnList(isForced != GLOW_PROTOCOL_GLOW_COMMAND_IS_FORCED_DEFAULT, [GLOW_PROTOCOL_GLOW_COMMAND_IS_FORCED, isForced], []));
 }
-

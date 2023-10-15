@@ -506,13 +506,6 @@ float GetClosestBoundingBoxPlaneDistanceFromInside_Debug(int link, vector pos, B
     return upDistance;
 }
 
-#define TOP 1
-#define BOTTOM 2
-#define LEFT 3
-#define RIGHT 4
-#define FRONT 5
-#define BACK 6
-
 #define GetUpNormalForFlatSideBb(boundingBoxData) GetUpNormalForFlatSideBb(GetBoundingBoxSize(boundingBoxData), GetBoundingBoxRotation(boundingBoxData))
 
 vector GetUpNormalForFlatSide(vector size, rotation rot)

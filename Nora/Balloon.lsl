@@ -1,3 +1,4 @@
+#include "Nora\Sounds\Balloon.lsl"
 
 #define OriginalBallonLinkSize <.42, .42, 1.2>
 #define MinBallonLinkSize <0.05064, 0.05061, 0.13747>
@@ -12,6 +13,9 @@
 #define MinSizeGravityAir 1
 #define NormalSizeGravityAir .2
 #define MaxSizeGravityAir .05
+
+//SetColorAndScale, vector color, vector scale
+#define BALLOON_SET_COLOR_AND_SCALE_MESSAGE "SetColorAndScale"
 
 // auto set, the link number of the ballono link called "Balloon"
 int BalloonLinkNumber;

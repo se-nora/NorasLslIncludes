@@ -2,6 +2,7 @@
 #define false FALSE
 #define bool integer
 #define int integer
+#define byte integer
 
 #define PRIM_SCALE PRIM_SIZE
 #define PRIM_POS PRIM_POSITION

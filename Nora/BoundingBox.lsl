@@ -221,15 +221,15 @@ bool IsInBoundingBox(vector pos, BoundingBoxData boundingBoxData)
 
 // returns the distance of a ray intersecting a plane
 // returns -1 if there is no intersection
-float PlaneRayIntersectDistance(vector plane, float distance, vector rayOrigin, vector rayDirection)
+float PlaneRayIntersectDistance(vector planeNormal, float distance, vector rayOrigin, vector rayDirection)
 {
-    float directionDotProduct = plane * rayDirection;
+    float directionDotProduct = planeNormal * rayDirection;
     if (directionDotProduct == 0)
     {
         return -1;
     }
 
-    return (plane * rayOrigin + distance) / directionDotProduct;
+    return (planeNormal * rayOrigin + distance) / directionDotProduct;
 }
 
 // returns the smaller number, if a number is negative, the other number is used

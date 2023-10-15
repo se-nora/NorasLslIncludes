@@ -35,3 +35,8 @@ list BalloonPopSounds = [
     "643f5635-4255-4c54-626d-fa3a4f6f414b", // 01-Balloon popping _ burst _ blast (248BDBD-WSB)
     "40b274e9-0f84-8d18-7b85-69ad2e1effbf" // 02-Balloon popping _ burst _ blast (3D77618-WSB)
 ];
+
+// key, duration
+list BalloonInflateSounds = [
+    "5de402d3-174a-54a8-ad3c-1600ff8f4ee6", 2.0 // Inflating Balloon Sound Effect
+];

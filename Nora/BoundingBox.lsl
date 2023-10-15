@@ -298,18 +298,81 @@ float GetBoundingBoxSurfaceHeight(vector pos, BoundingBoxData boundingBoxData)
     vector bbPos = GetBoundingBoxPosition(boundingBoxData);
     rotation bbRot = GetBoundingBoxRotation(boundingBoxData);
 
-    vector up = llRot2Up(bbRot);
-    if (up.z < 0)
+    vector diff = bbPos - pos;
+    vector flattenedDiff = diff/bbRot;
+
+    vector boxRadius = bbSize*.5;
+
+    bool isInBounds = (flattenedDiff.x < boxRadius.x
+        && flattenedDiff.x > -boxRadius.x
+        && flattenedDiff.y < boxRadius.y
+        && flattenedDiff.y > -boxRadius.y
+        && flattenedDiff.z < boxRadius.z
+        && flattenedDiff.z > -boxRadius.z);
+
+    if (!isInBounds)
     {
-        bbRot = llEuler2Rot(<0, PI, 0>) * bbRot;
+        return OUT_OF_BOUNDS_HEIGHT;
     }
-    
+
+    float upDistance =                      PlaneRayIntersectDistance(< 1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0,  1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, -1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0,  1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    return upDistance;
+}
+
+// returns the height of a position in a bounding box to the "outside" straight up
+float GetBoundingBoxSurfaceHeight_Debug(int link, vector pos, BoundingBoxData boundingBoxData)
+{
+    vector bbSize = GetBoundingBoxSize(boundingBoxData);
+    vector bbPos = GetBoundingBoxPosition(boundingBoxData);
+    rotation bbRot = GetBoundingBoxRotation(boundingBoxData);
+
     vector diff = bbPos - pos;
 
-    // Note: we manually add zDiff later, if we are outside of bounds and cast rays from there, its harder to know if it would collide
-    float zDiff = diff.z;
-    diff.z = 0;
+    vector flattenedDiff = diff/bbRot;
 
+    vector boxRadius = bbSize*.5;
+
+    bool isInBounds = (flattenedDiff.x < boxRadius.x
+        && flattenedDiff.x > -boxRadius.x
+        && flattenedDiff.y < boxRadius.y
+        && flattenedDiff.y > -boxRadius.y
+        && flattenedDiff.z < boxRadius.z
+        && flattenedDiff.z > -boxRadius.z);
+
+    if (!isInBounds)
+    {
+        SetLinkText(link, "OOB");
+        return OUT_OF_BOUNDS_HEIGHT;
+    }
+
+    float distance2Front = PlaneRayIntersectDistance(< 1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    float distance2Back =  PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    float distance2Left =  PlaneRayIntersectDistance(< 0, 1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>);
+    float distance2Right = PlaneRayIntersectDistance(< 0,-1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>);
+    float distance2Up =    PlaneRayIntersectDistance(< 0, 0, 1> * bbRot, boxRadius.z, diff, <0, 0, 1>);
+    float distance2Down =  PlaneRayIntersectDistance(< 0, 0,-1> * bbRot, boxRadius.z, diff, <0, 0, 1>);
+
+    SetLinkText(link, 
+        "distance2Front: "+(string)distance2Front+
+        "\ndistance2Back: "+(string)distance2Back+
+        "\ndistance2Left: "+(string)distance2Left+
+        "\ndistance2Right: "+(string)distance2Right+
+        "\ndistance2Up: "+(string)distance2Up+
+        "\ndistance2Down: "+(string)distance2Down
+    );
+    float upDistance =                      PlaneRayIntersectDistance(< 1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0,  1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, -1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0,  1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    return upDistance;
+}
     vector flattenedDiff = diff/bbRot;
 
     vector boxRadius = bbSize*.5;

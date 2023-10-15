@@ -232,6 +232,23 @@ float PlaneRayIntersectDistance(vector planeNormal, float distance, vector rayOr
     return (planeNormal * rayOrigin + distance) / directionDotProduct;
 }
 
+// Function to calculate the closest distance from a point to a plane
+float GetDistanceToPlane(vector planeNormal, vector planePosition, vector pointPosition)
+{
+    // Calculate the distance vector from the plane position to the point
+    vector pointToPlane = pointPosition - planePosition;
+
+    // the dot product of the plane's normal vector and the pointToPlane vector negated (the negative sign is applied). This represents the signed distance from the point to the plane.
+    float sn = -(planeNormal * pointToPlane);
+    // the dot product of the plane's normal vector with itself, which is essentially the squared magnitude of the normal vector.
+    float sd = (planeNormal * planeNormal);
+    // the ratio of sn to sd. This calculates the perpendicular distance from the point to the plane as a fraction of the squared magnitude of the normal vector.
+    float sb = sn / sd;
+
+    vector result = pointPosition + sb * planeNormal;
+    return llVecDist(pointPosition, result);
+}
+
 // returns the smaller number, if a number is negative, the other number is used
 float MinNonNegative(float f1, float f2)
 {
@@ -373,30 +390,120 @@ float GetBoundingBoxSurfaceHeight_Debug(int link, vector pos, BoundingBoxData bo
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
     return upDistance;
 }
+
+// returns the height of a position in a bounding box to the "outside" straight up
+float GetClosestBoundingBoxPlaneDistanceFromInside(vector pos, BoundingBoxData boundingBoxData)
+{
+    vector bbSize = GetBoundingBoxSize(boundingBoxData);
+    vector bbPos = GetBoundingBoxPosition(boundingBoxData);
+    rotation bbRot = GetBoundingBoxRotation(boundingBoxData);
+
+    vector diff = bbPos - pos;
+
     vector flattenedDiff = diff/bbRot;
 
     vector boxRadius = bbSize*.5;
-    vector rotatedRadius = <boxRadius.x, 0, 0>*bbRot;
 
     bool isInBounds = (flattenedDiff.x < boxRadius.x
         && flattenedDiff.x > -boxRadius.x
         && flattenedDiff.y < boxRadius.y
         && flattenedDiff.y > -boxRadius.y
-        /*&& flattenedDiff.z < boxRadius.z
-        && flattenedDiff.z > -boxRadius.z*/);
+        && flattenedDiff.z < boxRadius.z
+        && flattenedDiff.z > -boxRadius.z);
 
     if (!isInBounds)
     {
         return OUT_OF_BOUNDS_HEIGHT;
     }
 
+    vector up = llRot2Up(bbRot);
+    vector left = llRot2Left(bbRot);
+    vector fwd = llRot2Fwd(bbRot);
+
+    //float GetDistanceToPlane(vector planeNormal, vector planePosition, vector point)
+    float distance2Up =    GetDistanceToPlane(<  0,  0,  1> * bbRot,    up * bbSize.z/2, -diff);
+    float distance2Down =  GetDistanceToPlane(<  0,  0, -1> * bbRot,   -up * bbSize.z/2, -diff);
+    float distance2Left =  GetDistanceToPlane(<  0,  1,  0> * bbRot,  left * bbSize.y/2, -diff);
+    float distance2Right = GetDistanceToPlane(<  0, -1,  0> * bbRot, -left * bbSize.y/2, -diff);
+    float distance2Front = GetDistanceToPlane(<  1,  0,  0> * bbRot,   fwd * bbSize.x/2, -diff);
+    float distance2Back =  GetDistanceToPlane(< -1,  0,  0> * bbRot,  -fwd * bbSize.x/2, -diff);
+
+    float closestDistance = distance2Up;
+
+    closestDistance = MinFloat(distance2Down, closestDistance);
+    closestDistance = MinFloat(distance2Left, closestDistance);
+    closestDistance = MinFloat(distance2Right, closestDistance);
+    closestDistance = MinFloat(distance2Front, closestDistance);
+    closestDistance = MinFloat(distance2Back, closestDistance);
+    
+    return closestDistance;
+}
+
+// returns the height of a position in a bounding box to the "outside" straight up
+float GetClosestBoundingBoxPlaneDistanceFromInside_Debug(int link, vector pos, BoundingBoxData boundingBoxData)
+{
+    vector bbSize = GetBoundingBoxSize(boundingBoxData);
+    vector bbPos = GetBoundingBoxPosition(boundingBoxData);
+    rotation bbRot = GetBoundingBoxRotation(boundingBoxData);
+
+    vector diff = bbPos - pos;
+
+    vector flattenedDiff = diff/bbRot;
+
+    vector boxRadius = bbSize*.5;
+
+    bool isInBounds = (flattenedDiff.x < boxRadius.x
+        && flattenedDiff.x > -boxRadius.x
+        && flattenedDiff.y < boxRadius.y
+        && flattenedDiff.y > -boxRadius.y
+        && flattenedDiff.z < boxRadius.z
+        && flattenedDiff.z > -boxRadius.z);
+
+    if (!isInBounds)
+    {
+        SetLinkText(link, "OOB");
+        return OUT_OF_BOUNDS_HEIGHT;
+    }
+
+    vector up = llRot2Up(bbRot);
+    vector left = llRot2Left(bbRot);
+    vector fwd = llRot2Fwd(bbRot);
+
+    //float GetDistanceToPlane(vector planeNormal, vector planePosition, vector point)
+    float distance2Up =    GetDistanceToPlane(<  0,  0,  1> * bbRot,    up * bbSize.z/2, -diff);
+    float distance2Down =  GetDistanceToPlane(<  0,  0, -1> * bbRot,   -up * bbSize.z/2, -diff);
+    float distance2Left =  GetDistanceToPlane(<  0,  1,  0> * bbRot,  left * bbSize.y/2, -diff);
+    float distance2Right = GetDistanceToPlane(<  0, -1,  0> * bbRot, -left * bbSize.y/2, -diff);
+    float distance2Front = GetDistanceToPlane(<  1,  0,  0> * bbRot,   fwd * bbSize.x/2, -diff);
+    float distance2Back =  GetDistanceToPlane(< -1,  0,  0> * bbRot,  -fwd * bbSize.x/2, -diff);
+    float closestDistance = distance2Up;
+    closestDistance = MinFloat(distance2Down, closestDistance);
+    closestDistance = MinFloat(distance2Left, closestDistance);
+    closestDistance = MinFloat(distance2Right, closestDistance);
+    closestDistance = MinFloat(distance2Front, closestDistance);
+    closestDistance = MinFloat(distance2Back, closestDistance);
+    llSetLinkPrimitiveParamsFast(1, [
+        PRIM_TEXT, "closestDistance: "+(string)closestDistance+"\ndistance2Front: "+(string)distance2Front+
+            "\ndistance2Back: "+(string)distance2Back+
+            "\ndistance2Left: "+(string)distance2Left+
+            "\ndistance2Right: "+(string)distance2Right+
+            "\ndistance2Up: "+(string)distance2Up+
+            "\ndistance2Down: "+(string)distance2Down, <1,1,1>,1,
+        PRIM_LINK_TARGET, 2, PRIM_COLOR, ALL_SIDES, <0, 0, 1>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Up,    PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, <  0,  0,  1>*bbRot)/llGetRootRotation(),
+        PRIM_LINK_TARGET, 3, PRIM_COLOR, ALL_SIDES, <0, 0, 1>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Down,  PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, <  0,  0, -1>*bbRot)/llGetRootRotation(),
+        PRIM_LINK_TARGET, 4, PRIM_COLOR, ALL_SIDES, <0, 1, 0>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Left,  PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, <  0,  1,  0>*bbRot)/llGetRootRotation(),
+        PRIM_LINK_TARGET, 5, PRIM_COLOR, ALL_SIDES, <0, 1, 0>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Right, PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, <  0, -1,  0>*bbRot)/llGetRootRotation(),
+        PRIM_LINK_TARGET, 6, PRIM_COLOR, ALL_SIDES, <1, 0, 0>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Front, PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, <  1,  0,  0>*bbRot)/llGetRootRotation(),
+        PRIM_LINK_TARGET, 7, PRIM_COLOR, ALL_SIDES, <1, 0, 0>, 1, PRIM_POS_LOCAL, <0,0,0>, PRIM_SIZE, <.2,.2,2>*distance2Back,  PRIM_ROT_LOCAL, llRotBetween(<0,0,1>, < -1,  0,  0>*bbRot)/llGetRootRotation()
+    ]);
+
     float upDistance =                      PlaneRayIntersectDistance(< 1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0,  1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, -1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
     upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0,  1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
-    //upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
-    return upDistance + zDiff;
+    upDistance = MinNonNegative(upDistance, PlaneRayIntersectDistance(<0, 0, -1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    return upDistance;
 }
 
 #define TOP 1

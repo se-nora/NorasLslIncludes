@@ -1,10 +1,10 @@
 // possible definitions:
-// - IS_PAT_ENABLED
+// - IsPatEnabled
 // - IS_COLOR_HOST
 // - Initiator
 
 #include "Nora.lsl"
-#ifdef IS_PAT_ENABLED
+#ifdef IsPatEnabled
 #include "Pats\PatDefinition.lsl"
 #endif
 #ifndef GetNextTouchGlowColor
@@ -27,7 +27,7 @@ default
         llSetText("", <1,1,1>, 1);
         llListen(GLOW_CHANNEL, "", NULL_KEY, "");
 
-        #ifndef Initiator
+        #ifndef IS_COLOR_HOST
         llRegionSay(GLOW_CHANNEL, GetGlowStatusMessage(llGetOwner()));
         #endif
         #ifdef IS_COLOR_HOST
@@ -94,7 +94,7 @@ default
             }
             llRegionSay(GLOW_CHANNEL, CreateConsumeEnergyMessage(llGetOwner(), energyDrain));
 
-            #ifdef IS_PAT_ENABLED
+            #ifdef IsPatEnabled
             SendPat(llDetectedKey(n), "patting my head ^.^");
             #endif
         }

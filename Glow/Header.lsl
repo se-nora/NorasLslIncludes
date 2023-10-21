@@ -202,15 +202,18 @@ vector ColorSubNorm(vector c)
 \]
 #define GetLinkParams() [PRIM_LINK_TARGET, glowLink]
 
-#define AddFaceParams(glowColor, alpha) Verbose("+ " + llList2CSV(GetFaceParams(alpha)));\
-    vector glowColorFadeToColor = glowColor;\
+#define AddFaceParams(glowColor, alpha) vector glowColorFadeToColor = glowColor;\
+    Verbose("+ " + llList2CSV(GetFaceParams(alpha)));\
     if (glowColorFadeToColorString != "")\
     {\
         glowColorFadeToColor = (vector)glowColorFadeToColorString;\
     }\
     params += GetFaceParams(alpha)
+//#undef Verbose
+//#define Verbose(m) llOwnerSay(m)
 #define AddLinkParams() Verbose("+ " + llList2CSV(GetLinkParams()));\
     params += GetLinkParams()
+
 
 SetParams(list objectGlowDefinition)
 {
@@ -309,7 +312,7 @@ SetParams(list objectGlowDefinition)
         else if (what == c)\
         {\
             name = llList2##type(objectGlowDefinition, i++);\
-            Verbose("    " + #name + ":"" + (string)name);\
+            Verbose("    " + #name + ": " + (string)name);\
         }
         switchCase(GLOW_PRIM_DEF_MIN_GLOW_STRENGTH, glowMinStrength, Float)
         switchCase(GLOW_PRIM_DEF_MAX_GLOW_STRENGTH, glowMaxStrength, Float)

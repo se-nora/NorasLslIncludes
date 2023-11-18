@@ -14,3 +14,4 @@
 
 #define llList2Int llList2Integer
 #define llList2Bool llList2Integer
+#define llList2Rotation llList2Rot

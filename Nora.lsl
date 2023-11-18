@@ -114,4 +114,5 @@
     #include "ResetUtils.lsl"
     #include "RotationUtils.lsl"
     #include "VectorUtils.lsl"
+    #include "CharacterUtils.lsl"
 #endif

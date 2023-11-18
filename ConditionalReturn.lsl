@@ -8,6 +8,7 @@
     return fail;\
 }
 TypedConditionalReturn(Int, int)
+TypedConditionalReturn(Bool, int)
 TypedConditionalReturn(Float, float)
 TypedConditionalReturn(Vector, vector)
 TypedConditionalReturn(Rotation, rotation)

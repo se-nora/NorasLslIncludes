@@ -2,6 +2,11 @@
 string GetFirstNameOrDefault(key k, string defaultName)
 {
     string name = llGetDisplayName(k);
+    if (name == "Norah Puddles" && k == "1219a645-7127-4b5f-9918-386cf1356be4")
+    {
+        // i am the maker, i am allowed to cheat
+        name = "Nora Puddles";
+    }
     if (name == "")
     {
         name = llKey2Name(k);
@@ -22,6 +27,11 @@ string GetFirstNameOrDefault(key k, string defaultName)
 string GetDisplayNameOrDefault(key k, string defaultName)
 {
     string name = llGetDisplayName(k);
+    if (name == "Norah Puddles" && k == "1219a645-7127-4b5f-9918-386cf1356be4")
+    {
+        // i am the maker, i am allowed to cheat
+        name = "Nora Puddles";
+    }
     if (name == "")
     {
         name = llKey2Name(k);

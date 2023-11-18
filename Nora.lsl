@@ -61,6 +61,7 @@
     #define GetCallerInfo() __SHORTFILE__ + ":" + (string) ## __LINE__
 
     #define GetObjectPos(k) llList2Vector(llGetObjectDetails(k, [OBJECT_POS]), 0)
+    #define GetObjectVel(k) llList2Vector(llGetObjectDetails(k, [OBJECT_VELOCITY]), 0)
     #define GetObjectRot(k) llList2Rot(llGetObjectDetails(k, [OBJECT_ROT]), 0)
     #define GetObjectScale(k) llList2Vector(llGetObjectDetails(k, [OBJECT_SCALE]), 0)
     #define GetLinkPosLocal(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)

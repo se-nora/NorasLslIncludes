@@ -7,6 +7,8 @@
 }
 #define StartAnims(animations) StartOrStopAnims(Start, animations)
 #define StopAnims(animations) StartOrStopAnims(Stop, animations)
+#define StopAnim(animation) llStopAnimation(animation)
+#define StartAnim(animation) llStartAnimation(animation)
 
 
 list DefaultAnimationMap = [

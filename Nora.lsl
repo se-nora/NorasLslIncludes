@@ -182,5 +182,6 @@
     #include "CharacterUtils.lsl"
     #include "Compress.lsl"
     #include "List2CSV.lsl"
+    #include "IPC.lsl"
     #include "GetLinkVelocity.lsl"
 #endif

@@ -181,4 +181,5 @@
     #include "VectorUtils.lsl"
     #include "CharacterUtils.lsl"
     #include "Compress.lsl"
+    #include "GetLinkVelocity.lsl"
 #endif

@@ -180,4 +180,5 @@
     #include "RotationUtils.lsl"
     #include "VectorUtils.lsl"
     #include "CharacterUtils.lsl"
+    #include "Compress.lsl"
 #endif

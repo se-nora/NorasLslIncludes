@@ -38,3 +38,28 @@ list FemaleHurtSounds = [
     "494cf916-3a6c-a289-c39e-7d980f220ddb", // female surprised 16
     "85a2a275-1cde-d6dc-08dd-f53a6bbdfc62" // female surprised 17
 ];
+
+list ReeSounds = [
+    "ce4da03e-a38f-a8b4-04eb-92b1710d2007", // ree (1)
+    "abc53a99-2211-5b62-c6d2-24df8b48db46", // ree (2)
+    "b4fc1115-82b9-9bc6-ee1b-a7bf1e69cd77", // ree (3)
+    "dbb7ebf6-8039-f4c7-c68e-96aa26091397", // ree (4)
+    "f1825ddc-5fc1-d918-5a4f-a9b5be0dca62", // ree (5)
+    "61260576-65de-a8e7-e95c-b5eacea51a40", // ree (6)
+    "54bbef00-23cf-dab2-709a-17a4cd2643fb", // ree (7)
+    "c6f2d182-99b3-4b33-b290-2074fe73547c", // ree (8)
+    "6ec9fcb6-4b39-2b03-746e-92ad8ba968fa", // ree (9)
+    "3f261e63-dc7a-9af3-07bf-ab92fcc68a04", // ree (10)
+    "81660342-31f6-b251-97df-5fc2228a4e30", // ree (11)
+    "bcfb2018-e2c2-79af-408e-2fb8905abc52", // ree (12)
+    "78811ee0-4f29-78e4-afab-98a7f70faef8", // ree (13)
+    "84be329d-b438-2038-e924-95a221a5ace3", // ree (14)
+    "e6a91947-3666-e7b3-58da-929454711b9d", // ree (15)
+    "06e917f8-3822-b956-628c-b320d66ff055", // ree (17)
+    "77926c71-9ed4-2521-19c8-365cff182b07", // ree (18)
+    "0b34624a-71c4-3d8a-3b71-494f294cb969", // ree (19)
+    "0c918f82-c7e7-3bef-6dc0-ceafca1d3683", // ree (20)
+    "ee9551fd-ee9a-6367-6042-a752c5342e00", // ree (21)
+    "ceb4f6fb-56b2-d71d-d043-c08f90c91a75", // ree (22)
+    "6aaa7e98-1157-1e17-699e-056b6710d61b" // ree (23)
+];

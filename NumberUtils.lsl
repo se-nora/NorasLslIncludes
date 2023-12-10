@@ -26,6 +26,18 @@
     #define MaxI(left, right) MaxInt(left, right)
     #define MinI(left, right) MinInt(left, right)
 
+    #define CLAMP_PP(type, prepend) type Clamp ## prepend ## (type value, type min, type max)\
+    {\
+        if (value > max) return max;\
+        if (value < min) return min;\
+        return value;\
+    }
+    CLAMP_PP(float,Float)
+    #define Clamp(value, min, max) ClampFloat(value, min, max)
+    #define ClampF(value, min, max) ClampFloat(value, min, max)
+    CLAMP_PP(int,Int)
+    #define ClampI(value, min, max) ClampInt(value, min, max)
+
     #define AddTowards(variable, target, howMuch)\
     {\
         float howMuchos = llFabs(howMuch);\

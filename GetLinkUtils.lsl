@@ -1,3 +1,13 @@
+#define GetLinkPosLocal(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
+#define GetLinkRotLocal(link) llList2Rot(llGetLinkPrimitiveParams(link, [PRIM_ROT_LOCAL]), 0)
+#define GetLinkSize(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_SIZE]), 0)
+
+vector GetLinkOmega(int link)
+{
+    vector linkOmega = llGetOmega() / (GetLinkRotLocal(link) * llGetRootRotation());
+
+    return linkOmega;
+}
 
 vector GetLinkVelocity(vector localCenterOfMass, vector localVelocity, vector linkLocalPosition, vector localOmega)
 {

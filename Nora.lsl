@@ -64,8 +64,6 @@
     #define GetObjectVel(k) llList2Vector(llGetObjectDetails(k, [OBJECT_VELOCITY]), 0)
     #define GetObjectRot(k) llList2Rot(llGetObjectDetails(k, [OBJECT_ROT]), 0)
     #define GetObjectScale(k) llList2Vector(llGetObjectDetails(k, [OBJECT_SCALE]), 0)
-    #define GetLinkPosLocal(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
-    #define GetLinkSize(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_SIZE]), 0)
     #define GetRezzerKey(k) llList2Key(llGetObjectDetails(k, [OBJECT_REZZER_KEY]), 0)
 
     #define GetRootScale() llList2Vector(llGetLinkPrimitiveParams(LINK_ROOT, [PRIM_SIZE]), 0)
@@ -183,5 +181,5 @@
     #include "Compress.lsl"
     #include "List2CSV.lsl"
     #include "IPC.lsl"
-    #include "GetLinkVelocity.lsl"
+    #include "GetLinkUtils.lsl"
 #endif

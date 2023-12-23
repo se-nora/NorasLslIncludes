@@ -9,7 +9,26 @@
 #define StopAnims(animations) StartOrStopAnims(Stop, animations)
 #define StopAnim(animation) llStopAnimation(animation)
 #define StartAnim(animation) llStartAnimation(animation)
-
+EnsureAnimPlaying(key av, string animation)
+{
+    if  (llListFindList(llGetAnimationList(av), [animation]) == -1)
+    {
+        llStartAnimation(animation);
+    }
+}
+EnsureAnimsPlaying(key av, list toBePlayedAnims)
+{
+    list playedAnims = llGetAnimationList(av);
+    int i = llGetListLength(toBePlayedAnims);
+    while (i-- > 0)
+    {
+        string animation = llList2String(toBePlayedAnims, i);
+        if (llListFindList(playedAnims, [animation]) == -1)
+        {
+            llStartAnimation(animation);
+        }
+    }
+}
 
 list DefaultAnimationMap = [
     "6b61c8e8-4747-0d75-12d7-e49ff207a4ca", "express_afraid",

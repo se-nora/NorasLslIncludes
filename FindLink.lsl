@@ -1,6 +1,6 @@
 #define FIND_LINK_NOT_FOUND -2
 
-integer FindLink(string name)
+int FindLink(string name)
 {
     int c = llGetNumberOfPrims();
     while (c > 0)
@@ -16,7 +16,7 @@ integer FindLink(string name)
     return FIND_LINK_NOT_FOUND;
 }
 
-integer FindLinkByKey(key objectKey)
+int FindLinkByKey(key objectKey)
 {
     int c = llGetNumberOfPrims();
     while (c > 1)

@@ -9,6 +9,11 @@ vector GetLinkOmega(int link)
     return linkOmega;
 }
 
+#define GetLinkPosition(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
+#define GetLinkPos(link) GetLinkPosition(link)
+#define GetOffsetOmegaVel(angularVelAtZero, offset) angularVelAtZero%offset
+/*
+// Note: use GetOffsetOmegaVel instead
 vector GetLinkVelocity(vector localCenterOfMass, vector localVelocity, vector linkLocalPosition, vector localOmega)
 {
     vector relCenterLinkPosition = linkLocalPosition - localCenterOfMass;
@@ -18,7 +23,7 @@ vector GetLinkVelocity(vector localCenterOfMass, vector localVelocity, vector li
         relCenterLinkPosition.x * localOmega.y - relCenterLinkPosition.y * localOmega.x>;
 
     return localVelocity + linkVelocity;
-}
+}*/
 
 list LinkAccelerations = [];
 

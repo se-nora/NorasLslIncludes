@@ -1,5 +1,5 @@
-#ifndef NORA
-    #define NORA
+#ifndef NORA_LSL
+    #define NORA_LSL
     #include "ConvenienceRenames.lsl"
     
     #define MAX_PUBLIC_MESSAGE_LENGTH 1024
@@ -160,13 +160,16 @@
     #include "Sounds\Female.lsl"
     #include "Sounds\Male.lsl"
     #include "Sounds\Fireplace.lsl"
+    #include "Sounds\Balloon.lsl"
     #include "Sounds\Piano.lsl"
+    #include "Sounds\Unisex.lsl"
     
     #include "Rope.lsl"
     
     #include "AnimationUtils.lsl"
     #include "AvatarUtils.lsl"
     #include "BoundingBox.lsl"
+    #include "Compress.lsl"
     #include "ConditionalReturn.lsl"
     #include "FindLink.lsl"
     #include "GetColor.lsl"
@@ -178,7 +181,6 @@
     #include "RotationUtils.lsl"
     #include "VectorUtils.lsl"
     #include "CharacterUtils.lsl"
-    #include "Compress.lsl"
     #include "List2CSV.lsl"
     #include "IPC.lsl"
     #include "GetLinkUtils.lsl"

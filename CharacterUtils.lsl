@@ -74,3 +74,39 @@ string GetChar(integer ord)
         + UrlCode((ord >> 6) & 0x3F | 0x80)
         + UrlCode(ord & 0x3F | 0x80));
 }
+
+// used for when lsl for some reason sends utf8 as unicode, this will fix it
+string Utf8Decode(string utf8String)
+{
+    string decodedString = "";
+    integer i;
+
+    for (i = 0; i < llStringLength(utf8String); i++)
+    {
+        integer byte1 = GetCharValue(llGetSubString(utf8String, i, i));
+        if (byte1 < 128)
+        {
+            decodedString += llGetSubString(utf8String, i, i);
+        }
+        else if ((byte1 & 224) == 192)
+        {
+            integer byte2 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            decodedString += GetChar(((byte1 & 0x1F) << 6) | (byte2 & 0x3F));
+        }
+        else if ((byte1 & 240) == 224)
+        {
+            integer byte2 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            integer byte3 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            decodedString += GetChar(((byte1 & 0x1F) << 12) | ((byte2 & 0x3F) << 6) | (byte3 & 0x3F));
+        }
+        else if ((byte1 & 248) == 240)
+        {
+            integer byte2 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            integer byte3 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            integer byte4 = GetCharValue(llGetSubString(utf8String, ++i, i));
+            decodedString += GetChar(((byte1 & 0x07) << 18) | ((byte2 & 0x3F) << 12) | ((byte3 & 0x3F) << 6) | (byte4 & 0x3F));
+        }
+    }
+
+    return decodedString;
+}

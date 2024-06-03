@@ -15,12 +15,25 @@
         return <MaxFloat(v1.x, v2.x), MaxFloat(v1.y, v2.y), MaxFloat(v1.z, v2.z)>;
     }
 
+    #define ClampVec(v, min, max) ClampVector(v, min, max)
     vector ClampVector(vector v, vector min, vector max)
     {
         return <Clamp(v.x, min.x, max.x), Clamp(v.y, min.y, max.y), Clamp(v.z, min.z, max.z)>;
     }
+    
+    #define perp(a, b, t) PositionalInterpolation(a, b, t)
+    // Positional interpolation from a to b at t (where a is at t=0.0 and b is at t=1.0)
+    vector PositionalInterpolation(vector a, vector b, float t) 
+    {
+        return a+(b-a)*t;
+    }
 
-    vector ClampVec(vector v, vector min, vector max) { return ClampVector(v, min, max); }
+    #define slerp(a, b, t) PositionalInterpolation(a, b, t)
+    // Spherical linear interpolation from a to b at t (where a is at t=0.0 and b is at t=1.0)
+    rotation RotationalInterpolation(rotation a, rotation b, float t)
+    {
+        return llAxisAngle2Rot(llRot2Axis(b/=a), t*llRot2Angle(b))*a; // Example taken from http://wiki.secondlife.com/wiki/Slerp
+    }
 
     vector VecMaxList(list vectors)
     {

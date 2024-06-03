@@ -1,5 +1,3 @@
-#include "Sounds\Balloon.lsl"
-
 #define OriginalBallonLinkSize <.42, .42, 1.2>
 #define MinBallonLinkSize <0.05064, 0.05061, 0.13747>
 #define MaxBallonLinkSize <.6, .6, 1.58915>

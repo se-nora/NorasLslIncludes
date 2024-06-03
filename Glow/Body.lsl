@@ -11,6 +11,7 @@
 #define GetNextTouchGlowColor() GetRandomColor()
 #endif
 #ifdef IS_COLOR_HOST
+OnSetParams() { }
 list ObjectGlowDefinition = [];
 #endif
 
@@ -240,8 +241,8 @@ default
             #ifdef Initiator
             llStopSound();
             #endif
-            
         }
+        
         #ifdef Initiator
         else
         {

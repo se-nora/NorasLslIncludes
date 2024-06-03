@@ -156,6 +156,8 @@ Glow(float strength, float fadeSpeed, float timerDuration, bool shouldForce)
 #define GLOW_PRIM_DEF_COLOR_OFFSET_DEFAULT 0
 #define GLOW_PRIM_DEF_ALPHA 9
 #define GLOW_PRIM_DEF_ALPHA_DEFAULT 1
+#define GLOW_PRIM_DEF_EMIT_LIGHT 10
+#define GLOW_PRIM_DEF_EMIT_LIGHT_DEFAULT false
 
 // A link definition looks like this:
 // Trivia: 
@@ -163,24 +165,26 @@ Glow(float strength, float fadeSpeed, float timerDuration, bool shouldForce)
 // 
 // int GLOW_PRIM_DEF_LINK
 //   int Link - the link you want to let glow, default = LINK_THIS
+//     bool GLOW_PRIM_DEF_EMIT_LIGHT, specifies if glow also emits light
+//       bool on/off [false, true], default = false
 //     int GLOW_PRIM_DEF_FACE
-//     int Face - the Face you want to let glow
-//       int GLOW_PRIM_DEF_MIN_GLOW_STRENGTH
-//         float MinGlowStrength - minimum remaining glow strength after fade out, [0-1], default = 0
-//       int GLOW_PRIM_DEF_MAX_GLOW_STRENGTH
-//         float MaxGlowStrength - minimum remaining glow strength after fade out, [0-1], default = .5
-//       int GLOW_PRIM_DEF_COLOR_BRIGHTNESS_FACTOR
-//         float ColorBrightness - a factor the color is multiplied with, [0-1], default = 1
-//       int GLOW_PRIM_DEF_COLOR_BRIGHTNESS_FACTOR
-//         float ColorBrightness - a factor the color is multiplied with, [0-1], default = 1
-//       int GLOW_PRIM_DEF_FADE_TO_COLOR
-//         vector Color, if this is defined, the glow will only glow in the color while glowing, and fading towards this color when losing "strength", defaults = glow color
-//       int GLOW_PRIM_DEF_BASE_COLOR
-//         vector Color, if this is defined, the color will be additionally added, so if you take <1,1,1>, it will add this color to the glow color, the resulting normalized color is then used
-//       int GLOW_PRIM_DEF_COLOR_OFFSET, specifier to determine if an "older" color should be used
-//         int offset, the color will be additionally added, so if you take <1,1,1>, it will add this color to the glow color, the resulting normalized color is then used, [0-7], default = 0
-//       int GLOW_PRIM_DEF_ALPHA
-//         float alpha, the alpha of the color [0-1], default = 1
+//       int Face - the Face you want to let glow
+//         int GLOW_PRIM_DEF_MIN_GLOW_STRENGTH
+//           float MinGlowStrength - minimum remaining glow strength after fade out, [0-1], default = 0
+//         int GLOW_PRIM_DEF_MAX_GLOW_STRENGTH
+//           float MaxGlowStrength - minimum remaining glow strength after fade out, [0-1], default = .5
+//         int GLOW_PRIM_DEF_COLOR_BRIGHTNESS_FACTOR
+//           float ColorBrightness - a factor the color is multiplied with, [0-1], default = 1
+//         int GLOW_PRIM_DEF_COLOR_BRIGHTNESS_FACTOR
+//           float ColorBrightness - a factor the color is multiplied with, [0-1], default = 1
+//         int GLOW_PRIM_DEF_FADE_TO_COLOR
+//           vector Color, if this is defined, the glow will only glow in the color while glowing, and fading towards this color when losing "strength", defaults = glow color
+//         int GLOW_PRIM_DEF_BASE_COLOR
+//           vector Color, if this is defined, the color will be additionally added, so if you take <1,1,1>, it will add this color to the glow color, the resulting normalized color is then used
+//         int GLOW_PRIM_DEF_COLOR_OFFSET, specifier to determine if an "older" color should be used
+//           int offset, the color will be additionally added, so if you take <1,1,1>, it will add this color to the glow color, the resulting normalized color is then used, [0-7], default = 0
+//         int GLOW_PRIM_DEF_ALPHA
+//           float alpha, the alpha of the color [0-1], default = 1
 
 #define ParseError() llSay(DEBUG_CHANNEL, "Encountered invalid object glow definition, cancelling update, disabling."); IsEnabled = false
 vector ColorSubNorm(vector c)
@@ -200,7 +204,7 @@ vector ColorSubNorm(vector c)
     PRIM_COLOR, glowFace, ColorSubNorm(glowColorAddColor + glowColorFadeToColor*(1-GlowStrength)*glowColorBrightnessFactor + glowColor*GlowStrength*glowColorBrightnessFactor), alpha,\
     PRIM_GLOW, glowFace, glowMinStrength + (glowMaxStrength-glowMinStrength) * GlowStrength\
 \]
-#define GetLinkParams() [PRIM_LINK_TARGET, glowLink]
+#define GetLinkParams(glowLink) [PRIM_LINK_TARGET, glowLink]
 
 #define AddFaceParams(glowColor, alpha) vector glowColorFadeToColor = glowColor;\
     Verbose("+ " + llList2CSV(GetFaceParams(alpha)));\
@@ -211,9 +215,11 @@ vector ColorSubNorm(vector c)
     params += GetFaceParams(alpha)
 //#undef Verbose
 //#define Verbose(m) llOwnerSay(m)
-#define AddLinkParams() Verbose("+ " + llList2CSV(GetLinkParams()));\
-    params += GetLinkParams()
-
+#define AddLinkParams(glowLink)\
+{\
+    Verbose("+ " + llList2CSV(GetLinkParams(glowLink)));\
+    params += GetLinkParams(glowLink);\
+}
 
 SetParams(list objectGlowDefinition)
 {
@@ -235,6 +241,7 @@ SetParams(list objectGlowDefinition)
     float glowColorBrightnessFactor = GLOW_PRIM_DEF_COLOR_BRIGHTNESS_FACTOR_DEFAULT;
     vector glowColorAddColor = GLOW_PRIM_DEF_BASE_COLOR_DEFAULT;
     float alpha = GLOW_PRIM_DEF_ALPHA_DEFAULT;
+    bool emitLight = GLOW_PRIM_DEF_EMIT_LIGHT_DEFAULT;
 
     int previousWhat = GLOW_PRIM_DEF_LINK;
     list params = [];
@@ -255,6 +262,13 @@ SetParams(list objectGlowDefinition)
             return;
         }
 
+        #define switchCase(c, name, type)\
+        else if (what == c)\
+        {\
+            name = llList2##type(objectGlowDefinition, i++);\
+            Verbose("    " + #name + ": " + (string)name);\
+        }
+
         if (what == GLOW_PRIM_DEF_LINK)
         {
             // if we had no data before, or the previous data was not a link, then we need to paint the previous face
@@ -273,7 +287,7 @@ SetParams(list objectGlowDefinition)
             }
             else if (i != 2)
             {
-                AddLinkParams();
+                AddLinkParams(glowLink);
             }
 
             // set defaults again for each new link
@@ -285,6 +299,7 @@ SetParams(list objectGlowDefinition)
             glowColorFadeToColorString = "";
             glowColorAddColor = GLOW_PRIM_DEF_BASE_COLOR_DEFAULT;
             alpha = GLOW_PRIM_DEF_ALPHA_DEFAULT;
+            emitLight = GLOW_PRIM_DEF_EMIT_LIGHT_DEFAULT;
             Verbose("Link: " + (string)glowLink);
         }
         else if (what == GLOW_PRIM_DEF_FACE)
@@ -304,15 +319,19 @@ SetParams(list objectGlowDefinition)
             glowColorFadeToColorString = "";
             glowColorAddColor = GLOW_PRIM_DEF_BASE_COLOR_DEFAULT;
             alpha = GLOW_PRIM_DEF_ALPHA_DEFAULT;
+            emitLight = GLOW_PRIM_DEF_EMIT_LIGHT_DEFAULT;
 
             glowFace = llList2Integer(objectGlowDefinition, i++);
             Verbose("  Face: " + (string)glowFace);
         }
-        #define switchCase(c, name, type)\
-        else if (what == c)\
-        {\
-            name = llList2##type(objectGlowDefinition, i++);\
-            Verbose("    " + #name + ": " + (string)name);\
+        else if (what == GLOW_PRIM_DEF_EMIT_LIGHT)
+        {
+            vector glowColor = GetGlowColor(glowColorOffset);
+            emitLight = llList2Bool(objectGlowDefinition, i++);
+            if (emitLight)
+            {
+                params += [PRIM_POINT_LIGHT, GlowStrength > 0, glowColor, 1, 3*GlowStrength, 0.75];
+            }
         }
         switchCase(GLOW_PRIM_DEF_MIN_GLOW_STRENGTH, glowMinStrength, Float)
         switchCase(GLOW_PRIM_DEF_MAX_GLOW_STRENGTH, glowMaxStrength, Float)
@@ -321,6 +340,7 @@ SetParams(list objectGlowDefinition)
         switchCase(GLOW_PRIM_DEF_BASE_COLOR, glowColorAddColor, Vector)
         switchCase(GLOW_PRIM_DEF_COLOR_OFFSET, glowColorOffset, Integer)
         switchCase(GLOW_PRIM_DEF_ALPHA, alpha, Float)
+        switchCase(GLOW_PRIM_DEF_EMIT_LIGHT, emitLight, Bool)
         else
         {
             ParseError();

@@ -1,6 +1,7 @@
 #define GetLinkPosLocal(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
 #define GetLinkRotLocal(link) llList2Rot(llGetLinkPrimitiveParams(link, [PRIM_ROT_LOCAL]), 0)
 #define GetLinkSize(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_SIZE]), 0)
+#define GetLinkDesc(link) llList2String(llGetLinkPrimitiveParams(link, [PRIM_DESC]), 0)
 
 vector GetLinkOmega(int link)
 {
@@ -9,7 +10,7 @@ vector GetLinkOmega(int link)
     return linkOmega;
 }
 
-#define GetLinkPosition(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
+#define GetLinkPosition(link) GetLinkPosLocal(link)
 #define GetLinkPos(link) GetLinkPosition(link)
 #define GetOffsetOmegaVel(angularVelAtZero, offset) angularVelAtZero%offset
 /*

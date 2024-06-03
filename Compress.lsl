@@ -27,9 +27,9 @@
 
     string CompressParam(string param, bool omitDefault)
     {
-        string char = llGetSubString(param, 0, 0);
+        string c = llGetSubString(param, 0, 0);
         
-        if (char == "<")
+        if (c == "<")
         {
             if (llGetListLength(llParseString2List(param, [","],[])) == 4)
             {
@@ -45,14 +45,14 @@
         int dotCount = 0;
         int length = llStringLength(param);
         int i = 0;
-        if (char == "-")
+        if (c == "-")
         {
             i = 1;
         }
         while (i < length)
         {
-            char = llGetSubString(param, i, i);
-            if (char == ".")
+            c = llGetSubString(param, i, i);
+            if (c == ".")
             {
                 isMaybeFloat = true;
                 dotCount++;
@@ -65,7 +65,7 @@
             }
             else
             {
-                int charValue = GetCharValue(char);
+                int charValue = GetCharValue(c);
                 
                 // '0' - '9'
                 bool isNumeric = charValue >= 48 && charValue <= 57;

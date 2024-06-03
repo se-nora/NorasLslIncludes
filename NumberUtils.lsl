@@ -1,6 +1,28 @@
 #ifndef NORA_NUMBERUTILS
     #define NORA_NUMBERUTILS
 
+    // rounds a number to the n-th decimal
+    float Round(float number, int decimals)
+    {
+        int pow = (int)llPow(10, decimals);
+        
+        int numberMult = (int)(number*pow);
+        return ((float)numberMult)/pow;
+    }
+    // rounds a number to the n-th decimal and returns it as string
+    string RoundStr(float number, int decimals)
+    {
+        int pow = (int)llPow(10, decimals);
+
+        int numberMult = (int)(number*pow);
+        string decimalStr = (string)(numberMult%pow);
+        while (llStringLength(decimalStr) < decimals)
+        {
+            decimalStr = "0" + decimalStr;
+        }
+        return (string)((int)number) + "." + decimalStr;
+    }
+
     #define Rand(min, max) (min + llFrand(max-min))
 
     #define MIN_PP(type, prepend) type Min ## prepend ## (type left, type right)\

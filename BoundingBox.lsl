@@ -2,9 +2,12 @@
 #define GetBoundingBoxPosition(boundingBoxData) llList2Vector(boundingBoxData, 0)
 #define GetBoundingBoxRotation(boundingBoxData) llList2Rot(boundingBoxData, 1)
 #define GetBoundingBoxSize(boundingBoxData) llList2Vector(boundingBoxData, 2)
+#define GetBoundingBoxScale(boundingBoxData) llList2Vector(boundingBoxData, 2)
 #define GetBoundingBoxRootRotation(boundingBoxData) llList2Rot(boundingBoxData, 3)
 #define GetBoundingBoxObjectDescription(boundingBoxData) llList2String(boundingBoxData, 4)
 #define GetBoundingBoxLegacySize(boundingBoxData) llList2Vector(boundingBoxData, 5)
+#define GetBoundingBoxRootScale(boundingBoxData) llList2Vector(boundingBoxData, 6)
+#define GetBoundingBoxAxisSwap(boundingBoxData) llList2String(boundingBoxData, 7)
 
 #define GetEncapsulatingSphereRadius(boundingBoxData) llVecMag(GetBoundingBoxSize(boundingBoxData))
 
@@ -15,15 +18,17 @@ BoundingBoxData GetBoundingBoxData(key objectId)
     vector min = llList2Vector(l, 0);
     vector max = llList2Vector(l, 1);
     vector legacySize;
-    vector size = legacySize = <max.x-min.x, max.y-min.y, max.z-min.z>;
 
-    l = llGetObjectDetails(objectId, [OBJECT_POS, OBJECT_ROT, OBJECT_DESC]);
+    l = llGetObjectDetails(objectId, [OBJECT_POS, OBJECT_ROT, OBJECT_DESC, OBJECT_SCALE]);
     vector objectPos = llList2Vector(l, 0);
     rotation objectRot = llList2Rot(l, 1);
     string objectDesc = llList2String(l, 2);
+    vector objectScale = llList2Vector(l, 3);
+
+    vector size = legacySize = <max.x-min.x, max.y-min.y, max.z-min.z>;
+    rotation rot = objectRot;
 
     vector centerOffset = (min + max)/2.0; 
-    rotation rot = objectRot;
     
     vector up = llRot2Up(rot);
     vector down = -up;
@@ -31,7 +36,8 @@ BoundingBoxData GetBoundingBoxData(key objectId)
     vector right = -left;
     vector fwd = llRot2Fwd(rot);
     vector back = -fwd;
-    
+    string axisSwap = "none";
+
     if (
            up.z > down.z
         && up.z > left.z
@@ -49,6 +55,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
         && down.z > back.z)
     {
         // rotate by 180° and we are good
+        axisSwap = "x180";
         rot = llEuler2Rot(<PI, 0, 0>) * rot;
     }
     else if (
@@ -58,6 +65,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
         && left.z > fwd.z
         && left.z > back.z)
     {
+        axisSwap = "-x45";
         rot = llEuler2Rot(<-PI/2, 0, 0>) * rot;
         size = <size.x, size.z, size.y>;
     }
@@ -68,6 +76,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
         && right.z > fwd.z
         && right.z > back.z)
     {
+        axisSwap = "x45";
         rot = llEuler2Rot(<PI/2, 0, 0>) * rot;
         size = <size.x, size.z, size.y>;
     }
@@ -78,6 +87,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
         && fwd.z > right.z
         && fwd.z > back.z)
     {
+        axisSwap = "y45";
         rot = llEuler2Rot(<0, PI/2, 0>) * rot;
         size = <size.z, size.y, size.x>;
     }
@@ -88,6 +98,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
         && back.z > right.z
         && back.z > fwd.z)
     {
+        axisSwap = "-y45";
         rot = llEuler2Rot(<0, -PI/2, 0>) * rot;
         size = <size.z, size.y, size.x>;
     }
@@ -101,7 +112,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
     
     vector center = objectPos + (centerOffset * rot); 
 
-    return [center, rot, size, objectRot, objectDesc, legacySize, "hi"];
+    return [center, rot, size, objectRot, objectDesc, legacySize, objectScale, axisSwap];
 }
 
 
@@ -299,6 +310,34 @@ float GetBoundingBoxSurfaceHeightFromOnlyInside(vector pos, BoundingBoxData boun
     {
         return OUT_OF_BOUNDS_HEIGHT;
     }
+
+    float distance = PlaneRayIntersectDistance(<1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
+    distance = MinNonNegative(distance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));
+    distance = MinNonNegative(distance, PlaneRayIntersectDistance(<0, 1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    distance = MinNonNegative(distance, PlaneRayIntersectDistance(<0, -1, 0> * bbRot, boxRadius.y, diff, <0, 0, 1>));
+    distance = MinNonNegative(distance, PlaneRayIntersectDistance(<0, 0, 1> * bbRot, boxRadius.z, diff, <0, 0, 1>));
+    return distance;
+}
+
+// returns the height of a position in a bounding box to the "outside" straight up
+float GetBoundingBoxSurfaceHeightAlsoOutside(vector pos, BoundingBoxData boundingBoxData)
+{
+    vector bbSize = GetBoundingBoxSize(boundingBoxData);
+    vector bbPos = GetBoundingBoxPosition(boundingBoxData);
+    rotation bbRot = GetBoundingBoxRotation(boundingBoxData);
+
+    vector up = llRot2Up(bbRot);
+    if (up.z < 0)
+    {
+        bbRot = llEuler2Rot(<0, PI, 0>) * bbRot;
+    }
+    
+    vector diff = bbPos - pos;
+    vector flattenedDiff = diff/bbRot;
+
+    vector boxRadius = bbSize*.5;
+    vector rotatedRadius = <boxRadius.x,0,0>*bbRot;
+
 
     float distance = PlaneRayIntersectDistance(<1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>);
     distance = MinNonNegative(distance, PlaneRayIntersectDistance(<-1, 0, 0> * bbRot, boxRadius.x, diff, <0, 0, 1>));

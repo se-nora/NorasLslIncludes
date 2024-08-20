@@ -16,10 +16,25 @@ float AngleBetween(vector a, vector b) {
     // Calculate and return the angle in radians
     return llAcos(cosTheta);
 }
+
+vector GetOffsetTorqueV4(vector forceAppliedToObject, vector offsetFromCenterOfMass) {
+    return <(offsetFromCenterOfMass.y * forceAppliedToObject.z - offsetFromCenterOfMass.z * forceAppliedToObject.y), 
+            (offsetFromCenterOfMass.z * forceAppliedToObject.x - offsetFromCenterOfMass.x * forceAppliedToObject.z), 
+            (offsetFromCenterOfMass.x * forceAppliedToObject.y - offsetFromCenterOfMass.y * forceAppliedToObject.x)>;
+}
+
+vector GetOffsetTorqueV3(vector forceAppliedToObject, vector offsetFromCenterOfMass) {
+    // Calculate the torque using the cross product
+    vector torque = VecCross(
+        offsetFromCenterOfMass,
+        forceAppliedToObject * llSin(AngleBetween(offsetFromCenterOfMass, forceAppliedToObject)));
+    return torque;
+}
+
 /// gives an angular force you can apply to the center of mass of an object
 /// <param param="localPullForceLocation">the local position relative to the root prim</param>
 /// <param param="globalPullForceDirection">the directio the force is pulling at the <paramref param="localPullForceLocation"/></param>
-vector GetOffsetTorque(vector assumedScale, rotation rootRot, vector localPullForceLocation, vector globalPullForceDirection)
+vector GetOffsetTorqueV2(vector assumedScale, rotation rootRot, vector localPullForceLocation, vector globalPullForceDirection)
 {
     if (globalPullForceDirection == <0,0,0>)
     {
@@ -40,7 +55,7 @@ vector GetOffsetTorque(vector assumedScale, rotation rootRot, vector localPullFo
     //SetText(Dump(direction, torque));
     return torque;
 }
-vector GetOffsetTorqueOrig(rotation rootRot, vector localPullForceLocation, vector globalPullForceDirection)
+vector GetOffsetTorqueV1(rotation rootRot, vector localPullForceLocation, vector globalPullForceDirection)
 {
     float mass = llGetMass();
     vector scale = llGetScale();

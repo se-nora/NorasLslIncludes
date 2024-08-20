@@ -81,6 +81,23 @@
         return normal;
     }
 
+    vector llVecMul(vector v, vector factor)
+    {
+        return <v.x * factor.x, v.y * factor.y, v.z * factor.z>;
+    }
+
+    vector llVabs(vector v)
+    {
+        return <llFabs(v.x), llFabs(v.y), llFabs(v.z)>;
+    }
+    //   return <a.y * b.z - a.z * b.y,
+    //      a.z * b.x - a.x * b.z,
+    //      a.x * b.y - a.y * b.x>;
+    #define llCross(a, b) (a % b)
+
+    //a⋅b = a.x*b.x + a.y*b.y + a.z*b.z​
+    #define llDot(a, b) (a * b)
+
     rotation RotBetween(vector a, vector b)
     {
         float aabb = llSqrt((a * a) * (b * b)); // product of the lengths of the arguments

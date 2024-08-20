@@ -28,7 +28,7 @@
         return a+(b-a)*t;
     }
 
-    #define slerp(a, b, t) PositionalInterpolation(a, b, t)
+    #define slerp(a, b, t) RotationalInterpolation(a, b, t)
     // Spherical linear interpolation from a to b at t (where a is at t=0.0 and b is at t=1.0)
     rotation RotationalInterpolation(rotation a, rotation b, float t)
     {
@@ -65,7 +65,7 @@
         return maxVector;
     }
 
-    vector GetVolume(vector v1)
+    float GetVolume(vector v1)
     {
         return llFabs(v1.x) * llFabs(v1.y) * llFabs(v1.z);
     }

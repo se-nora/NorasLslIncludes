@@ -1,3 +1,21 @@
+
+float AngleBetween(vector a, vector b) {
+    // Calculate the dot product
+    float dotProduct = a * b;
+
+    // Calculate the magnitudes of the vectors
+    float magA = llVecMag(a);
+    float magB = llVecMag(b);
+
+    // Calculate the cosine of the angle
+    float cosTheta = dotProduct / (magA * magB);
+
+    // Ensure cosTheta is within the valid range for acos
+    cosTheta = Clamp(cosTheta, -1.0, 1.0);
+
+    // Calculate and return the angle in radians
+    return llAcos(cosTheta);
+}
 /// gives an angular force you can apply to the center of mass of an object
 /// <param param="localPullForceLocation">the local position relative to the root prim</param>
 /// <param param="globalPullForceDirection">the directio the force is pulling at the <paramref param="localPullForceLocation"/></param>

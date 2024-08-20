@@ -18,6 +18,21 @@
 // auto set, the link number of the ballono link called "Balloon"
 int BalloonLinkNumber;
 bool IsHelium = true;
+// follow target key variable
+key FollowTarget;
+
+int RopeLinkNumber;
+vector RopeLinkNumberLocalPos;
+// The length of the simulated rope. (It will stretch slightly longer than this, though)
+float RopeLength = 1;
+// this reduces the rotational pull effect from the rope
+#define AngularFullDampeningFactor .25
+// This dampens a fraction of the object's velocity every 0.1 seconds, if the rope is stretched.
+#define VelocityDampeningFactor .4
+// How much the object "bounces" back after stretching the rope to the limit of its length. This applies if the rope is stretched suddenly. 0.4 means it will bounce back with  40% of its original velocity. Setting this to below 0 will make the constraint act more stretchy than ropes normally do. Setting this to above 1 will make it unstable and dangerous.
+#define BounceBackImpulseFactor .4
+// The force ForceFactor of the rope. This applies when the rope is stretched slowly - in which case, it acts sort of like a spring.
+#define ForceFactor 16.0
 
 #define BalloonSize GetLinkSize(BalloonLinkNumber)
 #define BalloonSizePercentage (llVecMag(BalloonSize-MinBallonLinkSize)/llVecMag(MaxBallonLinkSize-MinBallonLinkSize))

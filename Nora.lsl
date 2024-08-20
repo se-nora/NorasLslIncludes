@@ -13,6 +13,25 @@
     #define PPconcat(A, B) A ## B
     #define PPParamsAsList(...) [__VA_ARGS__]
     #define Dump(...) #__VA_ARGS__ ## + ": " + llList2CSV([] + [__VA_ARGS__])
+    #define Dumpn(...) DumpnImpl(#__VA_ARGS__, llList2CSV([] + [__VA_ARGS__]))
+    string DumpnImpl(string args, string data)
+    {
+        list argsAsList = llCSV2List(args);
+        list dataAsList = llCSV2List(data);
+        int i =0;
+        string ret;
+        while (i < llGetListLength(argsAsList))
+        {
+            if (i != 0)
+            {
+                ret += "\n";
+            }
+            ret += llList2String(argsAsList, i) + ": " + llList2String(dataAsList, i);
+            i++;
+        }
+
+        return ret;
+    }
     #define Dumpl(...) #__VA_ARGS__ ## + ": " + llList2CSV(__VA_ARGS__)
     #define OwnerSayDump(...) llOwnerSay(#__VA_ARGS__ ## + ": " + llList2CSV([] + [__VA_ARGS__]))
 

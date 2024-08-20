@@ -1,5 +1,6 @@
 #ifndef GETCOLORLSL
     #define GETCOLORLSL
+    #define GetColorFromKey GetColorForKey
     list DefaultScaleColorArray = 
     [
         <1,0,0>,

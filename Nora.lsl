@@ -138,4 +138,5 @@
     #include "List2CSV.lsl"
     #include "IPC.lsl"
     #include "GetLinkUtils.lsl"
+    #include "CastRay.lsl"
 #endif

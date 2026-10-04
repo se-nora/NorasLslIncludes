@@ -1,5 +1,6 @@
 #define GetLinkPosLocal(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_POS_LOCAL]), 0)
 #define GetLinkRotLocal(link) llList2Rot(llGetLinkPrimitiveParams(link, [PRIM_ROT_LOCAL]), 0)
+#define GetLinkScale(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_SIZE]), 0)
 #define GetLinkSize(link) llList2Vector(llGetLinkPrimitiveParams(link, [PRIM_SIZE]), 0)
 #define GetLinkDesc(link) llList2String(llGetLinkPrimitiveParams(link, [PRIM_DESC]), 0)
 

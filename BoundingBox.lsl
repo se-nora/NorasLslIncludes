@@ -8,10 +8,11 @@
 #define GetBoundingBoxLegacySize(boundingBoxData) llList2Vector(boundingBoxData, 5)
 #define GetBoundingBoxRootScale(boundingBoxData) llList2Vector(boundingBoxData, 6)
 #define GetBoundingBoxAxisSwap(boundingBoxData) llList2String(boundingBoxData, 7)
+#define GetBoundingBoxCenterOffset(boundingBoxData) llList2Vector(boundingBoxData, 8)
 
 #define GetEncapsulatingSphereRadius(boundingBoxData) llVecMag(GetBoundingBoxSize(boundingBoxData))
 
-// returns [center, rot, size, root_rotation, object_desc, legacySize] of the object
+// returns [center, rot, size, root_rotation, object_desc, legacySize, axisSwapInfo, centerOffset] of the object
 BoundingBoxData GetBoundingBoxData(key objectId)
 {
     list l = llGetBoundingBox(objectId);
@@ -112,7 +113,7 @@ BoundingBoxData GetBoundingBoxData(key objectId)
     
     vector center = objectPos + (centerOffset * rot); 
 
-    return [center, rot, size, objectRot, objectDesc, legacySize, objectScale, axisSwap];
+    return [center, rot, size, objectRot, objectDesc, legacySize, objectScale, axisSwap, centerOffset];
 }
 
 
